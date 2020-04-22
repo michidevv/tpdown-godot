@@ -1,0 +1,30 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://scripts/Player.gd" type="Script" id=2]
+
+[sub_resource type="CapsuleShape2D" id=1]
+radius = 5.0
+height = 0.0
+
+[sub_resource type="StreamTexture" id=2]
+load_path = "res://.import/spritesheet.png-76e0b916bc20d45ac6900db6e21d8a9e.stex"
+
+[node name="Player" type="KinematicBody2D"]
+scale = Vector2( 3, 3 )
+script = ExtResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="."]
+rotation = 1.5708
+texture = SubResource( 2 )
+offset = Vector2( 0.5, 0 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 32, 32 )
+
+[node name="Position2D" type="Position2D" parent="."]
+position = Vector2( 6, 4 )
+__meta__ = {
+"_gizmo_extents_": 2.0
+}
