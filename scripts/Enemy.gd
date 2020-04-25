@@ -6,11 +6,14 @@ export var speed = 60
 export var push_speed = 320
 export(NodePath) var target_path
 
+const DEFAULT_ROTATION = deg2rad(90)
+
 var friction = push_speed * 3
 var velocity = Vector2.ZERO
 var state = FOLLOW
 
 onready var sprite = $Sprite
+onready var raycast = $RayCast2D
 
 var t = null
 func _ready():
@@ -24,9 +27,29 @@ func _physics_process(delta):
 			velocity = move_and_slide(velocity)
 			if (velocity == Vector2.ZERO): state = FOLLOW
 		FOLLOW:
-			velocity = (global_position.direction_to(t.global_position)).normalized() if t else Vector2.ZERO
-			rotation = velocity.angle()
-			velocity = move_and_slide(velocity * speed)
+			chase_target_scent()
+
+func chase_target_scent():
+	if not t:
+		return
+		
+	raycast.cast_to = t.position - position
+	raycast.force_raycast_update()
+	if not raycast.is_colliding():
+		chase_target(raycast.cast_to)
+	else:
+		for scent in t.scent_trail:
+			raycast.cast_to = scent.position - position
+			raycast.force_raycast_update()
+
+			if not raycast.is_colliding():
+				chase_target(raycast.cast_to)
+				break
+	
+func chase_target(dir: Vector2):
+	velocity = dir.normalized()
+	sprite.rotation = velocity.angle() + DEFAULT_ROTATION
+	velocity = move_and_slide(velocity * speed)
 
 func receive_damage(_damage, hit_position):
 #	velocity = Vector2(push_speed, 0).rotated(hit_position.angle())

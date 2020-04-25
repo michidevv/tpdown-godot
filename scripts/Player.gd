@@ -3,17 +3,26 @@ extends KinematicBody2D
 export var speed = 180
 export(PackedScene) var weapon
 
-onready var muzzle = $Position2D
-
+const scent_scene = preload("res://scenes/Scent.tscn")
 var velocity = Vector2()
 var w = null
+var scent_trail = []
+
+onready var scent_timer = $ScentTimer
 
 func _ready():
+	scent_timer.connect("timeout", self, "add_scent")
 	if weapon:
 		w = weapon.instance()
 #		Maybe global_position?
-		w.position = muzzle.position
+		w.position = $Position2D.position
 		add_child(w)
+		
+func add_scent():
+	var scent = scent_scene.instance()
+	scent.init(self, scent_timer.wait_time)
+	get_parent().add_child(scent)
+	scent_trail.push_front(scent)
 
 func get_input():
 	velocity = Vector2()
