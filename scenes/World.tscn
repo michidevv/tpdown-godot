@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/Knife.tscn" type="PackedScene" id=2]
 [ext_resource path="res://scenes/Enemy.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scenes/Barrel.tscn" type="PackedScene" id=4]
 
 [node name="World" type="Node2D"]
 
@@ -12,3 +13,10 @@ weapon = ExtResource( 2 )
 
 [node name="Enemy" parent="." instance=ExtResource( 3 )]
 position = Vector2( 100, 100 )
+target_path = NodePath("../Player")
+
+[node name="Barrel" parent="." instance=ExtResource( 4 )]
+position = Vector2( 140.219, 159.17 )
+
+[node name="Barrel2" parent="." instance=ExtResource( 4 )]
+position = Vector2( 141.759, 134.53 )
